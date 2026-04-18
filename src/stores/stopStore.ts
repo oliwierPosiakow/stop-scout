@@ -2,12 +2,15 @@ import { dbPromise } from '../utils/db';
 import { defineStore } from 'pinia';
 import type { FavoriteStop } from '../types/ztm';
 
+export type StopType = 'BUS' | 'TRAM' | 'BUS_TRAM' | 'UNKNOWN';
+
 export interface ZtmStop {
   stopId: number;
   stopName: string;
-  subName?: string;
+  subName: string;
   stopLat: number;
   stopLon: number;
+  type: StopType;
 }
 
 export const useStopsStore = defineStore('stops', {
@@ -29,7 +32,6 @@ export const useStopsStore = defineStore('stops', {
         await db.put('favorites', stop);
       } catch (error) {
         this.favoriteStops = this.favoriteStops.filter((s) => s.stopId !== stop.stopId);
-        console.error('Błąd zapisu w IndexedDB', error);
       }
     },
 
@@ -45,7 +47,6 @@ export const useStopsStore = defineStore('stops', {
         await db.delete('favorites', stopId);
       } catch (error) {
         this.favoriteStops.splice(index, 0, removedStop);
-        console.error('Błąd usuwania z IndexedDB', error);
       }
     },
 
@@ -71,21 +72,16 @@ export const useStopsStore = defineStore('stops', {
           subName: s.subName || s.stopDesc || '',
           stopLat: s.stopLat,
           stopLon: s.stopLon,
+          type: s.type,
         }));
 
-        // Cache data for offline use
         localStorage.setItem(CACHE_KEY, JSON.stringify(this.allStops));
       } catch (error) {
         const cachedStops = localStorage.getItem(CACHE_KEY);
         if (cachedStops && !navigator.onLine) {
           try {
             this.allStops = JSON.parse(cachedStops);
-            console.log('Loaded stops from cache (offline mode)');
-          } catch {
-            console.error('Błąd pobierania stops.json i cache jest niedostępny:', error);
-          }
-        } else {
-          console.error('Błąd pobierania stops.json:', error);
+          } catch {}
         }
       }
     },

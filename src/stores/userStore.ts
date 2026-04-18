@@ -25,7 +25,6 @@ export const useUserStore = defineStore('user', {
     async register(username: string, passwordRaw: string) {
       this.registerError = null;
       try {
-        // Walidacja
         if (!username || username.length < 3) {
           throw new Error('Nazwa użytkownika musi mieć co najmniej 3 znaki');
         }

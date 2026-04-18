@@ -42,12 +42,11 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center min-h-[calc(100vh-120px)] px-4 py-8">
+  <div class="flex flex-col items-center justify-center h-full px-4 py-8">
     <div
       class="bg-white dark:bg-slate-900 p-6 rounded-ios-2xl shadow-ios-md w-full max-w-sm border border-gray-200 dark:border-slate-800"
     >
       <div class="text-center mb-6">
-        <div class="text-5xl mb-3">🚌</div>
         <h2 class="text-ios-xl font-bold text-black dark:text-white mb-1">
           {{ isLoginMode ? 'Witaj ponowie' : 'Utwórz konto' }}
         </h2>
@@ -58,28 +57,24 @@ const handleSubmit = async () => {
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <label class="ios-label mb-2 block" for="username">
-            Nazwa użytkownika
-          </label>
+          <label class="ios-label mb-2 block" for="username"> Nazwa użytkownika </label>
           <input
             v-model="username"
             id="username"
             type="text"
-            placeholder="np. jan_kowalski"
+            placeholder="Login"
             required
             class="ios-input w-full"
           />
         </div>
 
         <div>
-          <label class="ios-label mb-2 block" for="password">
-            Hasło
-          </label>
+          <label class="ios-label mb-2 block" for="password">Hasło</label>
           <input
             v-model="password"
             id="password"
             type="password"
-            placeholder="••••••••"
+            placeholder="Hasło"
             required
             class="ios-input w-full"
           />
@@ -90,21 +85,17 @@ const handleSubmit = async () => {
             v-if="userStore.loginError && isLoginMode"
             class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-ios-lg text-ios-sm border border-red-200 dark:border-red-900/40"
           >
-            ⚠️ {{ userStore.loginError }}
+            {{ userStore.loginError }}
           </div>
           <div
             v-else-if="userStore.registerError && !isLoginMode"
             class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-ios-lg text-ios-sm border border-red-200 dark:border-red-900/40"
           >
-            ⚠️ {{ userStore.registerError }}
+            {{ userStore.registerError }}
           </div>
         </transition>
 
-        <button
-          type="submit"
-          :disabled="isLoading"
-          class="ios-button-primary w-full mt-6"
-        >
+        <button type="submit" :disabled="isLoading" class="ios-button-primary w-full mt-6">
           <span v-if="!isLoading">
             {{ isLoginMode ? 'Zaloguj się' : 'Zarejestruj się' }}
           </span>

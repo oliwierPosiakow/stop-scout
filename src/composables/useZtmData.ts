@@ -1,4 +1,3 @@
-// src/composables/useZtmData.ts
 import { ref } from 'vue';
 import type { ZtmVehicle } from '../types/ztm';
 
@@ -29,24 +28,19 @@ export function useZtmData() {
       departures.value = data.departures || [];
       lastUpdate.value = data.lastUpdate || null;
 
-      // Cache the data for offline use
       sessionStorage.setItem(CACHE_KEY_DEPARTURES, JSON.stringify(data.departures));
       sessionStorage.setItem(CACHE_KEY_TIMESTAMP, new Date().toISOString());
     } catch (err: any) {
-      // Try to load from cache if offline
       if (!navigator.onLine) {
         const cachedData = sessionStorage.getItem(CACHE_KEY_DEPARTURES);
         if (cachedData) {
           try {
             departures.value = JSON.parse(cachedData);
             lastUpdate.value = sessionStorage.getItem(CACHE_KEY_TIMESTAMP);
-            error.value = '📡 Wyświetlam cached dane (brak połączenia)';
           } catch {
-            error.value = 'Brak dostępu do sieci i nie mam cached danych';
             departures.value = [];
           }
         } else {
-          error.value = 'Brak połączenia i nie mam cached danych dla tego przystanku';
           departures.value = [];
         }
       } else {

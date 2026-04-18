@@ -9,6 +9,7 @@ import { useUserStore } from './stores/userStore';
 
 import { timeHelperPlugin } from './plugins/timeHelper';
 import { delayDirective } from './directives/v-delay';
+import { stopTypeHelperPlugin } from './plugins/stopTypeHelper';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -21,6 +22,7 @@ userStore.checkLocalSession();
 
 app.use(router);
 app.use(timeHelperPlugin);
+app.use(stopTypeHelperPlugin);
 app.directive('delay', delayDirective);
 
 app.mount('#app');

@@ -27,7 +27,7 @@ const delayColorClass = computed(() => {
     case 'on-time':
       return 'text-green-600 dark:text-green-400';
     case 'early':
-      return 'text-blue-600 dark:text-blue-400';
+      return 'text-gray-600 dark:text-gray-400';
     case 'late':
       return 'text-orange-600 dark:text-orange-400';
     case 'no-data':
@@ -46,32 +46,25 @@ const theoreticalTimeFormatted = computed(() => {
 
 <template>
   <div
-    class="ios-cell cursor-pointer px-0 flex flex-col gap-2 py-3 active:bg-gray-100 dark:active:bg-slate-800"
+    class="flex flex-col items-stretch ios-cell cursor-pointer px-0 gap-2 py-3 active:bg-gray-100 dark:active:bg-slate-800"
     :class="isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''"
     @click="isSelected = !isSelected"
   >
-    <!-- Header row: Route + Time -->
-    <div class="flex items-start justify-between px-4 gap-2">
+    <div class="flex flex-1 items-start justify-between gap-2">
       <div class="flex items-start gap-3 flex-1 min-w-0">
-        <!-- Route number badge -->
         <div
-          class="bg-slate-800 dark:bg-slate-900 text-white font-bold rounded-lg h-10 w-10 flex items-center justify-center text-ios-lg flex-shrink-0"
+          class="items-center justify-center bg-slate-800 dark:bg-neutral-600 text-white font-bold rounded-lg h-10 w-10 flex text-ios-lg flex-shrink-0"
         >
           {{ vehicle.routeShortName || vehicle.routeId }}
         </div>
 
-        <!-- Headsign -->
         <div class="flex-1 min-w-0">
           <h4 class="font-bold text-ios-lg text-black dark:text-white truncate">
             {{ vehicle.headsign }}
           </h4>
-          <p class="text-ios-xs text-gray-500 dark:text-gray-400 truncate">
-            {{ vehicle.vehicleService || 'Brak info' }}
-          </p>
         </div>
       </div>
 
-      <!-- Estimated time (big) -->
       <div class="text-right">
         <div class="text-ios-2xl font-bold text-blue-500 dark:text-blue-400 leading-none">
           {{ formattedTime }}
@@ -79,26 +72,16 @@ const theoreticalTimeFormatted = computed(() => {
       </div>
     </div>
 
-    <!-- Detail row: Scheduled time + Status -->
-    <div class="px-4 flex items-center justify-between gap-2 text-ios-sm">
+    <div class="flex flex-1 justify-between gap-2 text-ios-sm">
       <span class="text-gray-500 dark:text-gray-400">
-        Rozkład: <strong class="text-black dark:text-white">{{ theoreticalTimeFormatted }}</strong>
+        Planowo: <strong class="text-black dark:text-white">{{ theoreticalTimeFormatted }}</strong>
       </span>
 
-      <span
-        class="font-medium whitespace-nowrap"
-        :class="delayColorClass"
-      >
-        <span
-          v-if="vehicle.delayInSeconds !== null && vehicle.delayInSeconds !== undefined"
-        >
-          {{ $formatDelay(vehicle.delayInSeconds) }}
-        </span>
-        <span v-else>✓ Na czas</span>
+      <span class="font-medium whitespace-nowrap" :class="delayColorClass">
+        {{ $formatDelay(vehicle?.delayInSeconds) }}
       </span>
     </div>
 
-    <!-- Actions row (if selected) -->
     <div v-if="isSelected" class="px-4 mt-1">
       <slot name="actions"></slot>
     </div>

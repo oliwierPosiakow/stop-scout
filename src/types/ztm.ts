@@ -22,10 +22,11 @@ export interface ZtmStop {
   stopDesc: string;
   stopLat: number;
   stopLon: number;
+  type: string;
 }
 
 export interface FavoriteStop {
   stopId: number;
-  name?: string;
+  name: string;
   notes?: string;
 }
